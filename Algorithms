@@ -1,0 +1,189 @@
+import random
+import time
+
+# Sequential Search
+def sequential_search(lst, item):
+    start_time = time.time()  # start timer
+    found = False
+    for element in lst:
+        if element == item:
+            found = True
+            break
+    end_time = time.time()  # end timer
+    time_taken = end_time - start_time
+    return found, time_taken
+
+# Ordered Sequential Search
+def ordered_sequential_search(lst, item):
+    lst.sort()  # sort list first
+    start_time = time.time()
+    found = False
+    for element in lst:
+        if element == item:
+            found = True
+            break
+        elif element > item:  # stop if current element is bigger than item
+            break
+    end_time = time.time()
+    time_taken = end_time - start_time
+    return found, time_taken
+
+# Binary Search Iterative
+def binary_search_iterative(lst, item):
+    lst.sort()
+    start_time = time.time()
+    low = 0
+    high = len(lst) - 1
+    found = False
+    while low <= high:
+        mid = (low + high) // 2
+        if lst[mid] == item:
+            found = True
+            break
+        elif lst[mid] < item:
+            low = mid + 1
+        else:
+            high = mid - 1
+    end_time = time.time()
+    time_taken = end_time - start_time
+    return found, time_taken
+
+# Binary Search Recursive
+def binary_search_recursive(lst, item):
+    lst.sort()
+    start_time = time.time()
+
+    def helper(lst, item, low, high):
+        if low > high:
+            return False
+        mid = (low + high) // 2
+        if lst[mid] == item:
+            return True
+        elif lst[mid] < item:
+            return helper(lst, item, mid + 1, high)
+        else:
+            return helper(lst, item, low, mid - 1)
+
+    found = helper(lst, item, 0, len(lst)-1)
+    end_time = time.time()
+    time_taken = end_time - start_time
+    return found, time_taken
+
+# Main function to test searches
+def main():
+    list_sizes = [500, 1000, 5000]
+    for size in list_sizes:
+        seq_times = []
+        ord_times = []
+        bin_iter_times = []
+        bin_rec_times = []
+
+        for i in range(100):
+            test_list = random.sample(range(1, size*10), size)
+            item_to_search = 99999999  # worst case
+
+            _, t = sequential_search(test_list, item_to_search)
+            seq_times.append(t)
+
+            _, t = ordered_sequential_search(test_list, item_to_search)
+            ord_times.append(t)
+
+            _, t = binary_search_iterative(test_list, item_to_search)
+            bin_iter_times.append(t)
+
+            _, t = binary_search_recursive(test_list, item_to_search)
+            bin_rec_times.append(t)
+
+        # Print average times
+        print(f"\nList size: {size}")
+        print(f"Sequential Search: {sum(seq_times)/100:.7f} seconds")
+        print(f"Ordered Sequential Search: {sum(ord_times)/100:.7f} seconds")
+        print(f"Binary Search Iterative: {sum(bin_iter_times)/100:.7f} seconds")
+        print(f"Binary Search Recursive: {sum(bin_rec_times)/100:.7f} seconds")
+        print("-"*40)
+
+if __name__ == "__main__":
+    main()
+
+
+
+
+
+
+
+
+
+
+
+
+import random
+import time
+
+# Insertion Sort
+def insertion_sort(lst):
+    start_time = time.time()
+    for i in range(1, len(lst)):
+        key = lst[i]
+        j = i - 1
+        while j >= 0 and lst[j] > key:
+            lst[j + 1] = lst[j]
+            j -= 1
+        lst[j + 1] = key
+    end_time = time.time()
+    time_taken = end_time - start_time
+    return lst, time_taken
+
+# Shell Sort
+def shell_sort(lst):
+    start_time = time.time()
+    gap = len(lst) // 2
+    while gap > 0:
+        for i in range(gap, len(lst)):
+            temp = lst[i]
+            j = i
+            while j >= gap and lst[j - gap] > temp:
+                lst[j] = lst[j - gap]
+                j -= gap
+            lst[j] = temp
+        gap = gap // 2
+    end_time = time.time()
+    time_taken = end_time - start_time
+    return lst, time_taken
+
+# Python Built-in Sort
+def python_sort(lst):
+    start_time = time.time()
+    lst.sort()
+    end_time = time.time()
+    time_taken = end_time - start_time
+    return lst, time_taken
+
+# Main function to test sorts
+def main():
+    list_sizes = [500, 1000, 5000]
+    for size in list_sizes:
+        insertion_times = []
+        shell_times = []
+        python_times = []
+
+        for i in range(100):
+            test_list = random.sample(range(1, size*10), size)
+
+            _, t = insertion_sort(test_list.copy())
+            insertion_times.append(t)
+
+            _, t = shell_sort(test_list.copy())
+            shell_times.append(t)
+
+            _, t = python_sort(test_list.copy())
+            python_times.append(t)
+
+        # Print average times
+        print(f"\nList size: {size}")
+        print(f"Insertion Sort: {sum(insertion_times)/100:.7f} seconds")
+        print(f"Shell Sort: {sum(shell_times)/100:.7f} seconds")
+        print(f"Python Sort: {sum(python_times)/100:.7f} seconds")
+        print("-"*40)
+
+if __name__ == "__main__":
+    main()
